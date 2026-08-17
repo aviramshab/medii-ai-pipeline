@@ -1,0 +1,17 @@
+#requirements.txt
+fastapi
+uvicorn
+
+pydantic
+pydantic-settings
+pymysql
+python-multipart
+anthropic 
+lxml  
+tqdm 
+python-dotenv 
+typing
+sqlalchemy
+PyPDF2
+aiofiles
+cryptography
