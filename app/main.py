@@ -40,14 +40,7 @@ async def translate(
     
     # File paths
     main_path = os.path.join(settings.upload_directory, project.sourceFile)
-    temp_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        "data",
-        "uploads",
-        "DOR-38 Patient leaflet-ENG.docx"
-    )
-    
-    os.path.join(settings.upload_directory, 'DOR-38 Patient leaflet-ENG.docx')
+    temp_path = os.path.join(settings.data_directory, settings.template_filename)
     ref_path = (
         os.path.join(settings.upload_directory, project.referenceFile)
         if project.referenceFile else None
@@ -197,13 +190,8 @@ async def translate_direct_upload(
     output_name = f"{base_name}_translated_{time()}.docx"
     output_path = os.path.join(settings.output_directory, output_name)
 
-    # TEMPLATE (fixed)
-    template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        "data",
-        "uploads",
-        "DOR-38 Patient leaflet-ENG.docx"
-    )
+    # TEMPLATE
+    template_path = os.path.join(settings.data_directory, settings.template_filename)
 
     # Translate
     try:
