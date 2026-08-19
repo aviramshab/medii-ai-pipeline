@@ -23,10 +23,10 @@ class Settings(BaseSettings):
     NSMAP: ClassVar[dict] = {"w": W_NS}
 
     # --- DATABASE CONFIGURATION ---
-    mysql_host: str = "13.49.227.187"
+    mysql_host: str = "localhost"
     mysql_port: int = 3306
-    mysql_database: str = "medii_api_db"
-    mysql_user: str = "root"
+    mysql_database: str = "medii"
+    mysql_user: str = "medii"
     mysql_password: str = ""
 
     api_host: str = "0.0.0.0"
@@ -34,6 +34,7 @@ class Settings(BaseSettings):
     api_reload: bool = True
 
     base_path: str = ""
+    template_filename: str = "reference_template.docx"
 
     @property
     def base_dir(self) -> str:
@@ -85,7 +86,3 @@ class Settings(BaseSettings):
 
 # Create global settings instance
 settings = Settings()
-
-print("BASE_DIR:", settings.base_dir)
-print("DATA_DIR:", settings.data_directory)
-print(f"[Config] MySQL: {settings.mysql_host}:{settings.mysql_port}/{settings.mysql_database}")
