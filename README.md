@@ -72,6 +72,24 @@ prompt/
 └── template_3.txt       # Translation prompt template
 ```
 
+## Pipeline Detail
+
+Documents are parsed at the Word OOXML level rather than as plain text, so runs, styles, tables, and numbering survive translation. Right-to-left tables are converted to left-to-right layout, and each paragraph is rebuilt in place with its original formatting tags preserved.
+
+Text is batched against a character budget, with table content kept in separate batches so cell structure is never reordered. Each batch is sent to the model using an explicit block-separator protocol, and a returned block count that does not match the input is reconciled rather than silently dropped.
+
+When a reference document is supplied, its English sentences are extracted and used as a terminology authority, so approved regulatory wording is reused instead of paraphrased.
+
+Validation runs after every batch. Clinically relevant numbers are extracted from both source and translation and compared, a QA pass repairs detected issues, and a document-level pass runs before the file is written. API failures are classified and mapped to specific HTTP status codes, so a caller can distinguish a rate limit from a token-limit overflow from an exhausted credit balance.
+
+## API
+
+`POST /translate` translates the source file of an existing project and writes progress back to the database as batches complete.
+
+`POST /translate_direct_upload` translates an uploaded source file against an uploaded reference document, with no project record required.
+
+`GET /download_output/{filename}` returns a translated document.
+
 ## Tech Stack
 
 - Python
@@ -80,15 +98,15 @@ prompt/
 - SQLAlchemy
 - MySQL
 - Pydantic
-- Async Python
-- LLM-based validation
+- lxml (Word OOXML manipulation)
+- Rule-based and LLM-based validation
 
 ## Engineering Principles
 
 - Human review for high-stakes AI outputs
 - Explicit validation instead of relying on raw LLM responses
 - Modular separation between API, document processing, translation, and QA
-- Asynchronous processing for long-running AI workloads
+- Deterministic post-processing so document structure survives the model step
 - Environment-based configuration for credentials and deployment
 
 ## Local Setup
